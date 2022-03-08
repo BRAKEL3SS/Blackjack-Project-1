@@ -97,10 +97,11 @@ function hit() {
 }
 function checkScore() {
     if (players[1].Points > 21) {
-        console.log('Player busts, start over!')
-        const $restart = `<button class="restart">Restart</button>`
+        const $bust = `<h1>Player busts, start over!</h1>`
+        $('body').append($bust)
+        //const $restart = `<button class="restart">Restart</button>`
         //console.log($restart)
-        $('.buttons').append($restart)
+        //$('.buttons').append($restart)
     }
 }
 function dealerTurn() {
@@ -112,16 +113,20 @@ function dealerTurn() {
         $(`.player0`).append($showCard)
     }
     if (players[0].Points > 21) {
-        console.log('dealer busts, player wins')
+        const $bust = `<h1>dealer busts, player wins</h1>`
+        $('body').append($bust)
     }
     else if (players[1].Points > players[0].Points) {
-        console.log(`Player wins!`)
+        const $win =`<h1>Player wins!</h1>`
+        $('body').append($win)
     }
     else if (players[0].Points > players[1].Points) {
-        console.log('Dealer wins')
+        const $DWin = `<h1>Dealer wins</h1>`
+        $('body').append($DWin)
     }
     else {
-        console.log('Push!')
+        const $push = `<h1>Push! Replay!</h1>`
+        $('body').append($push)
     }
 }
 // function replay() {
