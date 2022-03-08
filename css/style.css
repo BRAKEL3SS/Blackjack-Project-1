@@ -1,0 +1,70 @@
+html, * {
+    box-sizing: border-box;
+  }
+  
+  svg {
+    filter: hue-rotate(-70deg) saturate(5) !important;
+  }
+  
+  html, body {
+    height: 100%;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    border: 4px dotted grey;
+  
+  }
+  
+  button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 16px;
+    color: grey;
+    border: 1px solid grey;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  button:hover {
+    background-color: grey;
+    color: white;
+  }
+.gameBoard {
+    height: 50vh;
+    border:5px;
+    background: darkgreen;
+    display: grid;
+    grid-template-areas: 
+    "dlr dlr dlr"
+    "plr plr scr";
+}  
+.player0 {
+    grid-area: dlr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.player1 {
+    grid-area: plr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.handTotal {
+    grid-area: scr;
+}
+h1 {
+    height:20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
