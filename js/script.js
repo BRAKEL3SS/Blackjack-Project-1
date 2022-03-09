@@ -12,6 +12,7 @@ let turn = 1
 $('.start').click(function() {
     const $gameButton = `<button class="hit">Hit</button><button class ="stay">Stay</button>`
     $(this).remove()
+    $('h3').remove()
     $('.buttons').append($gameButton)
     init()
 })
