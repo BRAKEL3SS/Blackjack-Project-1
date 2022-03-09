@@ -6,6 +6,7 @@ const masterDeck = buildMasterDeck()
 
 /*----- app's state (variables) -----*/
 let gameDeck = shuffleDeck()
+let turn = 1
 /*----- cached element references -----*/
 /*----- event listeners -----*/
 $('.start').click(function() {
@@ -18,6 +19,7 @@ $('.start').click(function() {
 
 /*----- functions -----*/
 function init() {
+    turn = 1
     createPlayers(2)
     playGame()
 }
@@ -54,14 +56,14 @@ function shuffleDeck() {
     }
     return shuffledDeck;
 } //this will give us a shufled deck to deal cards out of
-function deal() {
+function deal() { //deals cards to player and dealer
     players.forEach(function(player) {
         const card = gameDeck.pop()
         player.Hand.push(card)
         player.Points+= card.value
     })
 }
-function createPlayers(num) {
+function createPlayers(num) { //creates players for game
     players = [];
     for(let i = 1; i <= num; i++)
     {
@@ -70,7 +72,7 @@ function createPlayers(num) {
         players.push(player);
     }
 }
-function initialRender() {
+function initialRender() { //shows initial cards on screen
     players.forEach(function(player, i) {
         const $showCards = `<div class="card card1 ${player.Hand[0].face}"></div><div class="card card2 ${player.Hand[1].face}"></div>`
         $(`.player${i}`).append($showCards)
@@ -82,23 +84,23 @@ function initialRender() {
     showScore()
 
 }
-function showScore() {
+function showScore() { //renders score to screen
     const $score = `<h2 id="points">${players[1].Points}</h2>`
     $('#points').remove()
     $('.handTotal').append($score)
 }
 
-function hit() {
+function hit() { //hits card+1 to player[turn]
     const card = gameDeck.pop()
-    players[1].Hand.push(card)
-    players[1].Points+= card.value
+    players[turn].Hand.push(card)
+    players[turn].Points+= card.value
 
     const $showCard = `<div class="card ${card.face}"></div>`
-    $(`.player1`).append($showCard)
+    $(`.player${turn}`).append($showCard)
     showScore()
     checkScore()
 }
-function checkScore() {
+function checkScore() { //checks if player busts
     if (players[1].Points > 21) {
         const $bust = `<h1>Player busts, start over!</h1>`
         $('body').append($bust)
@@ -108,15 +110,12 @@ function checkScore() {
         //$('.buttons').append($restart)
     }
 }
-function dealerTurn() {
+function dealerTurn() { //logic for dealer after player turn ends
+    turn -= 1
     $('.back').remove()
     $('.player0').append(`<div class="card card1 ${players[0].Hand[0].face}"></div>`)
     while (players[0].Points < 17) {
-        const card = gameDeck.pop()
-        players[0].Hand.push(card)
-        players[0].Points+= card.value
-        const $showCard = `<div class="card ${card.face}"></div>`
-        $(`.player0`).append($showCard)
+        hit()
     }
     if (players[0].Points > 21) {
         const $bust = `<h1>dealer busts, player wins</h1>`
@@ -139,6 +138,9 @@ function dealerTurn() {
 function buttonsOff() {
     $('.hit').off('click')
     $('.stay').off('click')
+}
+function checkAce() {
+
 }
 // function replay() {
 //     $('.restart').remove()
