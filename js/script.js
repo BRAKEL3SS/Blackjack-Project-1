@@ -10,26 +10,25 @@ let turn = 1
 /*----- cached element references -----*/
 /*----- event listeners -----*/
 $('.start').click(function() {
-    const $gameButton = `<button class="hit">Hit</button><button class ="stay">Stay</button>`
     $(this).remove()
     $('h3').remove()
-    $('.buttons').append($gameButton)
     init()
 })
-$('.restart').click(function() {
-    location.reload()
-})
-
 
 /*----- functions -----*/
 function init() {
+    const $gameButton = `<button class="hit">Hit</button><button class ="stay">Stay</button>`
+    $('.buttons').append($gameButton)
+    $('.restart').remove()
+    $('.result').remove()
     turn = 1
     createPlayers(2)
     playGame()
 }
 function playGame() {
-    console.log('working')
-
+    if (gameDeck.length < 7) {
+        gameDeck = shuffleDeck()
+    }
     deal()
     deal()
     initialRender()
@@ -78,6 +77,7 @@ function createPlayers(num) { //creates players for game
     }
 }
 function initialRender() { //shows initial cards on screen
+    $('.card').remove()
     players.forEach(function(player, i) {
         const $showCards = `<div class="card card1 ${player.hands[0].face}"></div><div class="card card2 ${player.hands[1].face}"></div>`
         $(`.player${i}`).append($showCards)
@@ -143,6 +143,7 @@ function endGame() {
     $('.stay').remove()
     const $restart = `<button class="restart">Restart</button>`
     $('.buttons').append($restart)
+    $('.restart').click(replay)
 }
 function checkAce() {
     players[turn].hands.forEach(function(card) {
@@ -155,9 +156,7 @@ function checkAce() {
     })
 }
 function replay() {
-    $('.restart').click(function() {
-        location.reload(true)
-    })
+    init()
 }
 
 
