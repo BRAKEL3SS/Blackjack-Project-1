@@ -108,7 +108,7 @@ function hit() { //hits card+1 to players[turn]
 }
 function checkScore() { //checks if player busts
     if (players[1].points > 21) {
-        const $bust = `<h1>Player busts, start over!</h1>`
+        const $bust = `<h1 class="result">Player busts, start over!</h1>`
         $('body').append($bust)
         endGame()
     }
@@ -121,19 +121,19 @@ function dealerTurn() { //logic for dealer after player turn ends
         hit()
     }
     if (players[0].points > 21) {
-        const $bust = `<h1>dealer busts, player wins</h1>`
+        const $bust = `<h1 class="result">Dealer busts, Player wins!</h1>`
         $('body').append($bust)
     }
     else if (players[1].points > players[0].points) {
-        const $win =`<h1>Player wins!</h1>`
+        const $win =`<h1 class="result">Player wins!</h1>`
         $('body').append($win)
     }
     else if (players[0].points > players[1].points) {
-        const $DWin = `<h1>Dealer wins</h1>`
+        const $DWin = `<h1 class="result">Dealer wins</h1>`
         $('body').append($DWin)
     }
     else {
-        const $push = `<h1>Push! Replay!</h1>`
+        const $push = `<h1 class="result">Push! Replay!</h1>`
         $('body').append($push)
     }
     endGame()
