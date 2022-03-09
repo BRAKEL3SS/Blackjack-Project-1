@@ -15,7 +15,10 @@ $('.start').click(function() {
     $('.buttons').append($gameButton)
     init()
 })
-// $('.restart').click(replay)
+$('.restart').click(function() {
+    location.reload()
+})
+
 
 /*----- functions -----*/
 function init() {
@@ -59,8 +62,9 @@ function shuffleDeck() {
 function deal() { //deals cards to player and dealer
     players.forEach(function(player) {
         const card = gameDeck.pop()
-        player.Hand.push(card)
-        player.Points+= card.value
+        player.hands.push(card)
+        player.points+= card.value
+        checkAce()
     })
 }
 function createPlayers(num) { //creates players for game
@@ -68,13 +72,13 @@ function createPlayers(num) { //creates players for game
     for(let i = 1; i <= num; i++)
     {
         let hand = [];
-        let player = { Name: 'Player ' + i, ID: i, Points: 0, Hand: hand };
+        let player = { name: 'Player ' + i, id: i, points: 0, hands: hand };
         players.push(player);
     }
 }
 function initialRender() { //shows initial cards on screen
     players.forEach(function(player, i) {
-        const $showCards = `<div class="card card1 ${player.Hand[0].face}"></div><div class="card card2 ${player.Hand[1].face}"></div>`
+        const $showCards = `<div class="card card1 ${player.hands[0].face}"></div><div class="card card2 ${player.hands[1].face}"></div>`
         $(`.player${i}`).append($showCards)
     })
     $('.player0 .card1').remove()
@@ -85,47 +89,45 @@ function initialRender() { //shows initial cards on screen
 
 }
 function showScore() { //renders score to screen
-    const $score = `<h2 id="points">${players[1].Points}</h2>`
+    const $score = `<h2 id="points">${players[1].points}</h2>`
     $('#points').remove()
     $('.handTotal').append($score)
 }
 
-function hit() { //hits card+1 to player[turn]
+function hit() { //hits card+1 to players[turn]
     const card = gameDeck.pop()
-    players[turn].Hand.push(card)
-    players[turn].Points+= card.value
+    players[turn].hands.push(card)
+    players[turn].points+= card.value
 
     const $showCard = `<div class="card ${card.face}"></div>`
     $(`.player${turn}`).append($showCard)
+    checkAce()
     showScore()
     checkScore()
 }
 function checkScore() { //checks if player busts
-    if (players[1].Points > 21) {
+    if (players[1].points > 21) {
         const $bust = `<h1>Player busts, start over!</h1>`
         $('body').append($bust)
-        buttonsOff()
-        //const $restart = `<button class="restart">Restart</button>`
-        //console.log($restart)
-        //$('.buttons').append($restart)
+        endGame()
     }
 }
 function dealerTurn() { //logic for dealer after player turn ends
     turn -= 1
     $('.back').remove()
-    $('.player0').append(`<div class="card card1 ${players[0].Hand[0].face}"></div>`)
-    while (players[0].Points < 17) {
+    $('.player0').append(`<div class="card card1 ${players[0].hands[0].face}"></div>`)
+    while (players[0].points < 17) {
         hit()
     }
-    if (players[0].Points > 21) {
+    if (players[0].points > 21) {
         const $bust = `<h1>dealer busts, player wins</h1>`
         $('body').append($bust)
     }
-    else if (players[1].Points > players[0].Points) {
+    else if (players[1].points > players[0].points) {
         const $win =`<h1>Player wins!</h1>`
         $('body').append($win)
     }
-    else if (players[0].Points > players[1].Points) {
+    else if (players[0].points > players[1].points) {
         const $DWin = `<h1>Dealer wins</h1>`
         $('body').append($DWin)
     }
@@ -133,19 +135,30 @@ function dealerTurn() { //logic for dealer after player turn ends
         const $push = `<h1>Push! Replay!</h1>`
         $('body').append($push)
     }
-    buttonsOff()
+    endGame()
 }
-function buttonsOff() {
-    $('.hit').off('click')
-    $('.stay').off('click')
+function endGame() {
+    $('.hit').remove()
+    $('.stay').remove()
+    const $restart = `<button class="restart">Restart</button>`
+    $('.buttons').append($restart)
 }
 function checkAce() {
+    players[turn].hands.forEach(function(card) {
+        console.log(card.value, players[turn].points)
+        if (card.value === 11 && players[turn].points > 21) {
+            card.value = 1
+            players[turn].points -= 10
+        }
 
+    })
 }
-// function replay() {
-//     $('.restart').remove()
-//     init()
-// }
+function replay() {
+    $('.restart').click(function() {
+        location.reload(true)
+    })
+}
+
 
 
 
