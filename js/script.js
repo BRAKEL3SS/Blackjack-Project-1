@@ -72,9 +72,12 @@ function createPlayers(num) {
 }
 function initialRender() {
     players.forEach(function(player, i) {
-        const $showCards = `<div class="card ${player.Hand[0].face}"></div><div class="card ${player.Hand[1].face}"></div>`
+        const $showCards = `<div class="card card1 ${player.Hand[0].face}"></div><div class="card card2 ${player.Hand[1].face}"></div>`
         $(`.player${i}`).append($showCards)
     })
+    $('.player0 .card1').remove()
+    $('.player0').append(`<div class="card back"></div>`)
+    
 
     showScore()
 
@@ -99,12 +102,15 @@ function checkScore() {
     if (players[1].Points > 21) {
         const $bust = `<h1>Player busts, start over!</h1>`
         $('body').append($bust)
+        buttonsOff()
         //const $restart = `<button class="restart">Restart</button>`
         //console.log($restart)
         //$('.buttons').append($restart)
     }
 }
 function dealerTurn() {
+    $('.back').remove()
+    $('.player0').append(`<div class="card card1 ${players[0].Hand[0].face}"></div>`)
     while (players[0].Points < 17) {
         const card = gameDeck.pop()
         players[0].Hand.push(card)
@@ -128,6 +134,11 @@ function dealerTurn() {
         const $push = `<h1>Push! Replay!</h1>`
         $('body').append($push)
     }
+    buttonsOff()
+}
+function buttonsOff() {
+    $('.hit').off('click')
+    $('.stay').off('click')
 }
 // function replay() {
 //     $('.restart').remove()
