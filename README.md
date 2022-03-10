@@ -2,8 +2,9 @@
 General Assembly SEI portfolio project 1
 I made a browser based blackjack game! Blackjack is a casino game that I have always loved to play, so when I needed to make a browser based game for my General Assembly project, it seemed to be the obvious choice!
 
-
-
+![screenshot](https://github.com/BRAKEL3SS/Blackjack-Project-1/blob/main/screenshots/blackjack1.PNG "Base screenshot")
+![screenshot](https://github.com/BRAKEL3SS/Blackjack-Project-1/blob/main/screenshots/blackjack2.PNG "Game Start")
+![screenshot](https://github.com/BRAKEL3SS/Blackjack-Project-1/blob/main/screenshots/blackjack3.PNG "Game End")
 ## Technologies Used
 HTML, CSS, Javascript, JQuery
 
@@ -11,7 +12,7 @@ The use of JQuery was instrumental to this project as it makes use of DOM elemen
 
 ## Getting started
 Use the following link to access the game:
-https://brakel3ss.github.io/Blackjack-Project-1/
+[Blackjack Game](https://brakel3ss.github.io/Blackjack-Project-1/)
 
 ### Instructions to Play
 The objective is to get your hand as close as possible to a total of 21, and once you stand, hope that the dealer fails to get closer. Aces are soft 11's, meaning if an ace would cause you to bust its value will be altered to 1. Use the Hit buttona to draw another card, but be careful not to go over 21 or you bust and lose the round. Use the Stay button to stop drawing cards and end your turn.
