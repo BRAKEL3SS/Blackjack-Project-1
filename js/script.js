@@ -16,7 +16,7 @@ $('.start').click(function() {
 })
 
 /*----- functions -----*/
-function init() {
+function init() { //initializes game for a fresh start
     const $gameButton = `<button class="hit">Hit</button><button class ="stay">Stay</button>`
     $('.buttons').append($gameButton)
     $('.restart').remove()
@@ -31,11 +31,11 @@ function playGame() {
     }
     deal()
     deal()
-    initialRender()
+    render()
     $('.hit').click(hit)
     $('.stay').click(dealerTurn)
 }
-function buildMasterDeck() {
+function buildMasterDeck() { //This function will build our deck and assign values to the cards
     const deck = [];
     suits.forEach(function(suit) {
       ranks.forEach(function(rank) {
@@ -46,8 +46,8 @@ function buildMasterDeck() {
       });
     });
     return deck;
-  } //This function will build our deck and assign values to the cards
-function shuffleDeck() {
+  } 
+function shuffleDeck() { //this will give us a shufled deck to deal cards out of
 // Create a copy of the masterDeck
     const tempDeck = [...masterDeck];
     shuffledDeck = [];
@@ -58,7 +58,7 @@ function shuffleDeck() {
         shuffledDeck.push(tempDeck.splice(rndIdx, 1)[0]);
     }
     return shuffledDeck;
-} //this will give us a shufled deck to deal cards out of
+} 
 function deal() { //deals cards to player and dealer
     players.forEach(function(player) {
         const card = gameDeck.pop()
@@ -76,23 +76,9 @@ function createPlayers(num) { //creates players for game
         players.push(player);
     }
 }
-function initialRender() { //shows initial cards on screen
-    $('.card').remove()
-    players.forEach(function(player, i) {
-        const $showCards = `<div class="card card1 ${player.hands[0].face}"></div><div class="card card2 ${player.hands[1].face}"></div>`
-        $(`.player${i}`).append($showCards)
-    })
-    $('.player0 .card1').remove()
-    $('.player0').append(`<div class="card back"></div>`)
-    
-
-    showScore()
-
-}
 function showScore() { //renders score to screen
-    const $score = `<h2 id="points">${players[1].points}</h2>`
     $('#points').remove()
-    $('.handTotal').append($score)
+    $('.handTotal').append(`<h2 id="points">${players[1].points}</h2>`)
 }
 
 function hit() { //hits card+1 to players[turn]
@@ -100,52 +86,45 @@ function hit() { //hits card+1 to players[turn]
     players[turn].hands.push(card)
     players[turn].points+= card.value
 
-    const $showCard = `<div class="card ${card.face}"></div>`
-    $(`.player${turn}`).append($showCard)
+    render()
     checkAce()
     showScore()
     checkScore()
 }
 function checkScore() { //checks if player busts
     if (players[1].points > 21) {
-        const $bust = `<h1 class="result">Player busts, start over!</h1>`
-        $('body').append($bust)
+        $('body').append(`<h1 class="result">Player busts, start over!</h1>`)
         endGame()
     }
 }
 function dealerTurn() { //logic for dealer after player turn ends
     turn -= 1
-    $('.back').remove()
-    $('.player0').append(`<div class="card card1 ${players[0].hands[0].face}"></div>`)
+    render()
     while (players[0].points < 17) {
         hit()
     }
     if (players[0].points > 21) {
-        const $bust = `<h1 class="result">Dealer busts, Player wins!</h1>`
-        $('body').append($bust)
+        $('body').append(`<h1 class="result">Dealer busts, Player wins!</h1>`)
     }
     else if (players[1].points > players[0].points) {
-        const $win =`<h1 class="result">Player wins!</h1>`
-        $('body').append($win)
+        $('body').append(`<h1 class="result">Player wins!</h1>`)
     }
     else if (players[0].points > players[1].points) {
-        const $DWin = `<h1 class="result">Dealer wins</h1>`
-        $('body').append($DWin)
+        $('body').append(`<h1 class="result">Dealer wins</h1>`)
     }
     else {
-        const $push = `<h1 class="result">Push! Replay!</h1>`
-        $('body').append($push)
+        $('body').append(`<h1 class="result">Push! Replay!</h1>`)
     }
     endGame()
 }
-function endGame() {
+function endGame() { //runs after dealer turn and enables restart button to reinitialize game
     $('.hit').remove()
     $('.stay').remove()
     const $restart = `<button class="restart">Restart</button>`
     $('.buttons').append($restart)
     $('.restart').click(replay)
 }
-function checkAce() {
+function checkAce() { //function allows ace to rollover to 1 if causing a bust
     players[turn].hands.forEach(function(card) {
         console.log(card.value, players[turn].points)
         if (card.value === 11 && players[turn].points > 21) {
@@ -155,11 +134,37 @@ function checkAce() {
 
     })
 }
-function replay() {
+function replay() { //reinitializes game
     init()
 }
+function render() { //renders card in hand to screen, hiding dealer top card if it is player turn
+    showScore()
+    if (turn === 1) {
+        $('.card').remove()
+    players[0].hands.forEach(function(card, i) {
+        const $showCards = `<div class="card card${i+1} ${card.face}"></div>`
+        $(`.player0`).append($showCards)
+    })
+    $('.player0 .card1').remove()
+    $('.player0').append(`<div class="card back"></div>`)
+    players[1].hands.forEach(function(card, i) {
+        const $showCards = `<div class="card card${i=+1} ${card.face}"></div>`
+        $(`.player1`).append($showCards)
+    })
+    }
+    else {
+        $('.card').remove()
+    players[0].hands.forEach(function(card, i) {
+        const $showCards = `<div class="card card${i+1} ${card.face}"></div>`
+        $(`.player0`).append($showCards)
+    })
+    players[1].hands.forEach(function(card, i) {
+        const $showCards = `<div class="card card${i=+1} ${card.face}"></div>`
+        $(`.player1`).append($showCards)
 
-
+    })
+    }
+}
 
 
 
